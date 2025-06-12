@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Адмін-панель | Медіаетика</title>
+  <style>
+    .admin-container {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .admin-section {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .btn {
+      padding: 5px 10px;
+      background: #f44336;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">Адмін-панель | Медіаетика</div>
+      <nav>
+        <ul>
+          <li><a href="index.html">← На сайт</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container admin-container">
+    <!-- Розділ надісланих статей -->
+    <div class="admin-section">
+      <h2>Надіслані статті</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Ім’я</th>
+            <th>Телефон</th>
+            <th>Тема</th>
+            <th>Дата</th>
+            <th>Дія</th>
+          </tr>
+        </thead>
+        <tbody id="articlesTable">
+          <!-- Дані завантажаться через JS -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const articles = JSON.parse(localStorage.getItem('submittedArticles')) || [];
+      const table = document.getElementById('articlesTable');
+
+      articles.forEach(article => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${article.name}</td>
+          <td>${article.phone}</td>
+          <td>${article.topic}</td>
+          <td>${article.date}</td>
+          <td><button class="btn" onclick="deleteArticle('${article.date}')">Видалити</button></td>
+        `;
+        table.appendChild(row);
+      });
+    });
+
+    function deleteArticle(date) {
+      let articles = JSON.parse(localStorage.getItem('submittedArticles')) || [];
+      articles = articles.filter(article => article.date !== date);
+      localStorage.setItem('submittedArticles', JSON.stringify(articles));
+      location.reload(); // Оновити сторінку
+    }
+  </script>
+</body>
+</html>
